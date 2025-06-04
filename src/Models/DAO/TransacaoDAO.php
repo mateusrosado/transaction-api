@@ -22,13 +22,23 @@ class TransacaoDAO {
         }
     }
 
-    public function buscarId($id){
+    public function existeId($id){
         try{
             $stmt = $this->db->prepare("SELECT COUNT(*) FROM transacoes WHERE id = ?");
             $stmt->execute([$id]);
             return $stmt->fetchColumn() > 0;
         } catch(PDOException $e) {
             return true;
+        }
+    }
+
+    public function buscarTarefa($id){
+        try{
+            $stmt = $this->db->prepare("SELECT * FROM transacoes WHERE id = ?");
+            $stmt->execute([$id]);
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch(PDOException $e) {
+            return null;
         }
     }
 }

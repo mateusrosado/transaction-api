@@ -22,7 +22,7 @@ class TransacaoController {
             }
             $dao = new TransacaoDAO();
 
-            if($dao->buscarId($transacao->id)) {
+            if($dao->existeId($transacao->id)) {
                 return $response->withStatus(422);
             }
 
@@ -35,6 +35,27 @@ class TransacaoController {
             }
         } catch (Exception $e) {
                 return $response->withStatus(400);
+        }
+    }
+
+    public function show(Request $request, Response $response, $args) {
+        try {
+            if (!isset($args['id'])) {
+                return $response->withStatus(404);
+            }
+            
+            $dao = new TransacaoDAO();
+            
+            $transacao = $dao->buscarTarefa($args['id']);
+
+            if ($transacao) {
+                $response->getBody()->write(json_encode($transacao));
+                return $response->withStatus(200);
+            } else {
+                return $response->withStatus(404);
+            }
+        } catch (Exception $e) {
+                return $response->withStatus(404);
         }
     }
 }
