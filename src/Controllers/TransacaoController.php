@@ -58,4 +58,20 @@ class TransacaoController {
                 return $response->withStatus(404);
         }
     }
+
+    public function destroyAll(Request $request, Response $response) {
+        try {            
+            $dao = new TransacaoDAO();
+            
+            $sucesso = $dao->excluirTabela();
+
+            if ($sucesso) {
+                return $response->withStatus(200);
+            } else {
+                return $response->withStatus(404);
+            }
+        } catch (Exception $e) {
+                return $response->withStatus(404);
+        }
+    }
 }

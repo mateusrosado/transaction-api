@@ -41,4 +41,13 @@ class TransacaoDAO {
             return null;
         }
     }
+    
+    public function excluirTabela(){
+        try{
+            $stmt = $this->db->prepare("DELETE FROM transacoes");
+            return $stmt->execute();
+        } catch(PDOException $e) {
+            return false;
+        }
+    }
 }
