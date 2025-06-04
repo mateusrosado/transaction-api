@@ -74,4 +74,28 @@ class TransacaoController {
                 return $response->withStatus(404);
         }
     }
+
+    public function destroyId(Request $request, Response $response, $args) {
+        try {
+            if (!isset($args['id'])) {
+                return $response->withStatus(404);
+            }
+            
+            $dao = new TransacaoDAO();
+            
+            if(!$dao->existeId($args['id'])) {
+                return $response->withStatus(404);
+            }
+
+            $sucesso = $dao->excluirId($args['id']);
+
+            if ($sucesso) {
+                return $response->withStatus(200);
+            } else {
+                return $response->withStatus(404);
+            }
+        } catch (Exception $e) {
+                return $response->withStatus(404);
+        }
+    }
 }

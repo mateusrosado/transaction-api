@@ -50,4 +50,13 @@ class TransacaoDAO {
             return false;
         }
     }
+    
+    public function excluirId($id){
+        try{
+            $stmt = $this->db->prepare("DELETE FROM transacoes WHERE id = ?");
+            return $stmt->execute([$id]);
+        } catch(PDOException $e) {
+            return false;
+        }
+    }
 }
