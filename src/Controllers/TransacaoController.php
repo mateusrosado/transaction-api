@@ -1,0 +1,40 @@
+<?php
+namespace Src\Controllers;
+
+use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Src\Models\Transacao;
+use Src\Models\DAO\TransacaoDAO;
+use Exception;
+
+class TransacaoController {    
+    public function store(Request $request, Response $response) {
+        try {
+            $dados = $request->getParsedBody();
+            if (!is_array($dados)) {
+                return $response->withStatus(400);
+            }
+            
+            $transacao = new Transacao($dados['id'], $dados['valor'], $dados['dataHora']);
+
+            if(!isset($transacao->id) || !isset($transacao->valor) || !isset($transacao->dataHora)) {
+                return $response->withStatus(422);
+            }
+            $dao = new TransacaoDAO();
+
+            if($dao->buscarId($transacao->id)) {
+                return $response->withStatus(422);
+            }
+
+            $sucesso = $dao->inserir($transacao);
+
+            if ($sucesso) {
+                return $response->withStatus(201);
+            } else {
+                return $response->withStatus(422);
+            }
+        } catch (Exception $e) {
+                return $response->withStatus(400);
+        }
+    }
+}
