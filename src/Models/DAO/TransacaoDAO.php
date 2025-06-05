@@ -32,7 +32,7 @@ class TransacaoDAO {
         }
     }
 
-    public function buscarTarefa($id){
+    public function buscarPorId($id){
         try{
             $stmt = $this->db->prepare("SELECT * FROM transacoes WHERE id = ?");
             $stmt->execute([$id]);

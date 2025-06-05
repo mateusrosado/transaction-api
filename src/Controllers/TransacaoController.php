@@ -1,6 +1,8 @@
 <?php
 namespace Src\Controllers;
 
+use DateTime;
+use DateTimeZone;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Src\Models\Transacao;
@@ -46,9 +48,11 @@ class TransacaoController {
             
             $dao = new TransacaoDAO();
             
-            $transacao = $dao->buscarTarefa($args['id']);
+            $transacao = $dao->buscarPorId($args['id']);
 
             if ($transacao) {
+                $transacao['dataHora'] = new DateTime($transacao['dataHora'], new DateTimeZone('America/Sao_Paulo'));
+                $transacao['dataHora'] = $transacao['dataHora']->format(DateTime::ATOM);
                 $response->getBody()->write(json_encode($transacao));
                 return $response->withStatus(200);
             } else {
