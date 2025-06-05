@@ -16,7 +16,7 @@ class TransacaoDAO {
     public function inserir(Transacao $transacao) {
         try{
             $stmt = $this->db->prepare("INSERT INTO transacoes (id, valor, dataHora) VALUES (?, ?, ?)");
-            return $stmt->execute([$transacao->id, $transacao->valor, $transacao->dataHora]);
+            return $stmt->execute([$transacao->id, $transacao->valor, $transacao->dataHora->format('Y-m-d H:i:s')]);
         } catch(PDOException $e) {
             return false;
         }
@@ -59,4 +59,17 @@ class TransacaoDAO {
             return false;
         }
     }
+
+    public function gerarEstatisticas() {
+    $sql = "SELECT COUNT(*) as count,
+                IFNULL(SUM(valor), 0) as sum,
+                IFNULL(AVG(valor), 0) as avg,
+                IFNULL(MIN(valor), 0) as min,
+                IFNULL(MAX(valor), 0) as max
+            FROM transacoes WHERE dataHora >= DATE_SUB(NOW(), INTERVAL 60 SECOND)";
+    
+    $stmt = $this->db->prepare($sql);
+    $stmt->execute();
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 }

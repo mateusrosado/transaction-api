@@ -34,7 +34,7 @@ class TransacaoController {
                 return $response->withStatus(422);
             }
         } catch (Exception $e) {
-                return $response->withStatus(400);
+            return $response->withStatus(400);
         }
     }
 
@@ -55,7 +55,7 @@ class TransacaoController {
                 return $response->withStatus(404);
             }
         } catch (Exception $e) {
-                return $response->withStatus(404);
+            return $response->withStatus(400);
         }
     }
 
@@ -71,7 +71,7 @@ class TransacaoController {
                 return $response->withStatus(404);
             }
         } catch (Exception $e) {
-                return $response->withStatus(404);
+            return $response->withStatus(400);
         }
     }
 
@@ -95,7 +95,24 @@ class TransacaoController {
                 return $response->withStatus(404);
             }
         } catch (Exception $e) {
-                return $response->withStatus(404);
+            return $response->withStatus(400);
+        }
+    }
+
+    public function statistic(Request $request, Response $response, $args) {
+        try {
+            $dao = new TransacaoDAO();
+            
+            $estatistica = $dao->gerarEstatisticas();
+
+            if (is_array($estatistica)) {
+                $response->getBody()->write(json_encode($estatistica));
+                return $response->withStatus(200);
+            } else {
+                return $response->withStatus(400);
+            }
+        } catch (Exception $e) {
+            return $response->withStatus(400);
         }
     }
 }

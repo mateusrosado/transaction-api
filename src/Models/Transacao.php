@@ -2,6 +2,7 @@
 namespace Src\Models;
 
 use DateTime;
+use DateTimeZone;
 use Exception;
 
 class Transacao {
@@ -12,7 +13,10 @@ class Transacao {
     public function __construct($id = NULL, $valor = NULL, $dataHora = NULL) {
         if($this->validarID($id)) $this->id = $id;
         if($this->validarValor($valor)) $this->valor = $valor;
-        if($this->validarData($dataHora)) $this->dataHora = $dataHora;
+        if($this->validarData($dataHora)) {
+            $data = new DateTime($dataHora);
+            $this->dataHora = $data->setTimezone(new DateTimeZone('America/Sao_Paulo'));
+        }
     }
 
     private function validarID($uuid) {
